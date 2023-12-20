@@ -9,7 +9,7 @@ hti = Html2Image(
 )
 
 # Create the 'images' folder if it doesn't exist
-images_folder = os.path.join(os.getcwd(), "images")
+images_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images")
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
