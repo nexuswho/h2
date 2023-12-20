@@ -25,7 +25,7 @@ def generate_screenshot():
         absolute_path = os.path.join(images_folder, random_filename)
 
         # Set the output path for html2image
-        hti.output_path = images_foldergit
+        hti.output_path = images_folder
 
         # Print debugging information
         print(f"Attempting to save file to: {absolute_path}")
