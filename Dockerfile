@@ -1,7 +1,7 @@
 # Use the official Python image as the base image
 FROM python:3.8-slim
 
-# install google chrome
+# Install required dependencies for Chrome and Chromedriver
 RUN apt-get update -y \
     && apt-get install -y wget gnupg xvfb unzip \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -13,7 +13,7 @@ RUN apt-get update -y \
 ENV CHROMEDRIVER_VERSION 2.19
 ENV CHROMEDRIVER_DIR /chromedriver
 RUN mkdir $CHROMEDRIVER_DIR \
-    && wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
+    && wget -q --continue -P $CHROMEDRIVER_DIR "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/120.0.6099.109/linux64/chromedriver-linux64.zip" \
     && unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR \
     && export PATH=$CHROMEDRIVER_DIR:$PATH
 
@@ -38,13 +38,11 @@ RUN chown -R user:user /app
 # Switch to the non-root user
 USER user
 
-# Expose both port 5000 and 8000 to the outside world
+# Expose port 5000
 EXPOSE 5000
-EXPOSE 8000
 
 # Define environment variables
-ENV FLASK_APP=app.py
-ENV FLASK_APP_SERVER=server.py
+ENV FLASK_APP=wsgi.py
 
-# Run both Flask applications
-CMD ["sh", "-c", "flask run --host=0.0.0.0 --port=5000 --with-threads & flask run --host=0.0.0.0 --port=8000"]
+# Run app.py when the container launches
+CMD ["python", "app.py"]    
