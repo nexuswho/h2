@@ -5,7 +5,6 @@ import os
 
 app = Flask(__name__)
 hti = Html2Image(
-    browser_executable="C:\Program Files\Google\Chrome Dev\Application\chrome.exe",
     custom_flags=["--no-sandbox", "--disable-gpu"],
 )
 
@@ -26,7 +25,7 @@ def generate_screenshot():
         absolute_path = os.path.join(images_folder, random_filename)
 
         # Set the output path for html2image
-        hti.output_path = images_folder
+        hti.output_path = images_foldergit
 
         # Print debugging information
         print(f"Attempting to save file to: {absolute_path}")
