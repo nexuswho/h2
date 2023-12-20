@@ -29,6 +29,14 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . /app/
 
+RUN chmod 0644 /app/del.sh
+
+RUN apt-get -y install cron
+
+RUN crontab -l | { cat; echo "0 0 */2 * * bash /app/del.sh"; } | crontab -
+
+RUN cron
+
 # Create a non-root user
 RUN groupadd -r user && useradd -r -g user user
 
