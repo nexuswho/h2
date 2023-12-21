@@ -32,7 +32,7 @@ def generate_screenshot():
         paths = hti.screenshot(html_str=html, css_str=css, save_as=random_filename)
 
         # Create a download link
-        download_link = f"https://h2i-nexuswho.koyeb.app/download/{random_filename}"
+        download_link = f"https://h2i-calfkicker.koyeb.app/download/{random_filename}"
 
         return jsonify({"download_link": download_link})
     except Exception as e:
