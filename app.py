@@ -64,7 +64,7 @@ def generate_screenshot():
             html_file.write(html_page_content)
 
         # Create a download link to the HTML page
-        download_link = f"https://h2i-calfkicker.koyeb.app/download/{html_filename}"
+        download_link = f"https://h2i-calfkicker.koyeb.app/download/{image_filename}"
 
         return jsonify({"download_link": download_link})
     except Exception as e:
@@ -78,7 +78,7 @@ def download_screenshot(filename):
         return send_from_directory(images_folder, filename)
 
     # Otherwise, serve it as an attachment (e.g., image)
-    return send_file(os.path.join(images_folder, filename), as_attachment=True)
+    return send_file(os.path.join(images_folder, filename))
 
 
 if __name__ == "__main__":
