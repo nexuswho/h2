@@ -33,7 +33,7 @@ RUN chmod 0644 /app/del.sh
 
 RUN apt-get -y install cron
 
-RUN crontab -l | { cat; echo "0 0 */2 * * bash /app/del.sh"; } | crontab -
+RUN crontab -l | { cat; echo "*/5 * * * * bash /app/del.sh"; } | crontab -
 
 RUN cron
 

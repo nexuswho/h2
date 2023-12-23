@@ -6,8 +6,8 @@ folder_path="/app/images/"
 # Change to the specified folder
 cd "$folder_path" || exit
 
-# Delete files older than 2 days
-find . -type f -mtime +2 -exec rm {} \;
+# Delete files older than 5 minutes
+find . -type f -mmin +5 -exec rm {} \;
 
 # Optional: Print a message indicating the operation is complete
-echo "Files older than 2 days deleted in $folder_path"
+echo "Files older than 5 minutes deleted in $folder_path"
