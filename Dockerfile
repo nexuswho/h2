@@ -25,17 +25,30 @@ COPY requirements.txt /app/
 
 # Install any dependencies specified in requirements.txt
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install gunicorn
 
 # Copy the current directory contents into the container at /app
 COPY . /app/
 
-RUN chmod 0644 /app/del.sh
+RUN chmod 777 /app/del.sh
 
-RUN apt-get -y install cron
+RUN apt update && apt install curl -y
 
-RUN crontab -l | { cat; echo "*/5 * * * * bash /app/del.sh"; } | crontab -
+# Latest releases available at https://github.com/aptible/supercronic/releases
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.29/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=cd48d45c4b10f3f0bfdd3a57d054cd05ac96812b
 
-RUN cron
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+    && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+    && chmod +x "$SUPERCRONIC" \
+    && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+    && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
+
+
+RUN echo '*/5  *  *  *  * nohup /app/del.sh' >> cronjobs
+
 
 # Create a non-root user
 RUN groupadd -r user && useradd -r -g user user
@@ -52,5 +65,7 @@ EXPOSE 5000
 # Define environment variables
 ENV FLASK_APP=wsgi.py
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]    
+RUN chmod 755 /app/run.sh
+
+
+CMD ["/app/run.sh"]
